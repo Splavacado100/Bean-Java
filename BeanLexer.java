@@ -1,17 +1,11 @@
-import java.util.ArrayList;
-
 public class BeanLexer {
 	private String line;
 	private int pos;
 	private Token currentToken;
 	private char currentChar;
-	private ArrayList<Token> tokens;
-	private int lineNum;
 	
-	public BeanLexer(String line, ArrayList<Token> tokens, int lineNum) {
+	public BeanLexer(String line) {
 		this.line = line;
-		this.tokens = tokens;
-		this.lineNum = lineNum;
 		this.pos = 0;
 		this.currentChar = this.line.charAt(this.pos);
 	}
@@ -129,7 +123,7 @@ public class BeanLexer {
 				} else if (this.currentChar == 92) {
 					this.currentChar = (char)92;
 				} else {
-					this.exception("Unknown escape sequence: '\\" + this.currentChar + "'");
+					BeanInterpreter.exception("Unknown escape sequence: '\\" + this.currentChar + "'");
 				}
 			}
 			result += this.currentChar;
@@ -152,12 +146,12 @@ public class BeanLexer {
 			} else if (this.currentChar == 92) {
 				this.currentChar = (char)92;
 			} else {
-				this.exception("Unknown escape sequence: '\\" + this.currentChar + "'");
+				BeanInterpreter.exception("Unknown escape sequence: '\\" + this.currentChar + "'");
 			}
 		} else if (this.isChar(this.currentChar)) {
 			;
 		} else {
-			this.exception("BAD CHAR");
+			BeanInterpreter.exception("BAD CHAR");
 		}
 		return this.currentChar;
 	}
@@ -190,7 +184,7 @@ public class BeanLexer {
 				char c = this.getChar();
 				this.advance();
 				if (this.currentChar != 39) {
-					this.exception("Unclosed character literal");
+					BeanInterpreter.exception("Unclosed character literal");
 				}
 				this.advance();
 				return new CharacterToken(c);
@@ -309,8 +303,7 @@ public class BeanLexer {
 				return new EqualsToken();
 			}
 			System.out.println("INTERPRETER ERROR: LEXXER");
-			System.out.println("Unknown char: " + this.currentChar);
-			System.exit(0);
+			BeanInterpreter.exception("Unknown char: " + this.currentChar);
 		}
 		return new EOLToken();
 	}
@@ -319,15 +312,9 @@ public class BeanLexer {
 		this.eat();
 		
 		while (!(this.currentToken instanceof EOLToken)) {
-			this.tokens.add(this.currentToken);
+			BeanInterpreter.tokensLine.add(this.currentToken);
 			this.eat();
 		}
-		this.tokens.add(this.currentToken);
-	}
-	
-	private void exception(String s) {
-		System.out.print("Line " + this.lineNum + ": ");
-		System.out.println(s);
-		System.exit(0);
+		BeanInterpreter.tokensLine.add(this.currentToken);
 	}
 }

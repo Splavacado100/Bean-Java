@@ -2,14 +2,10 @@ import java.util.ArrayList;
 
 public class BeanParser {
 	private ArrayList<Token> tokenList;
-	private DatatypeDict vars;
-	int lineNum;
 	private int size;
 	
-	public BeanParser(ArrayList<Token> tokenList, DatatypeDict vars, int lineNum) {
+	public BeanParser(ArrayList<Token> tokenList) {
 		this.tokenList = tokenList;
-		this.vars = vars;
-		this.lineNum = lineNum;
 		this.size = tokenList.size();
 	}
 	
@@ -34,7 +30,7 @@ public class BeanParser {
 			} else if (out instanceof FalseToken) {
 				System.out.println("false");
 			} else {
-				this.exception("BAD TYPE");
+				BeanInterpreter.exception("BAD TYPE");
 			}
 		}
 		/*
@@ -57,7 +53,7 @@ public class BeanParser {
 			} else if (out instanceof FalseToken) {
 				System.out.println("false");
 			} else {
-				this.exception("BAD TYPE");
+				BeanInterpreter.exception("BAD TYPE");
 			}
 		}
 		*/
@@ -66,17 +62,17 @@ public class BeanParser {
 			String name = ((VariableToken)this.tokenList.get(1)).value;
 			Token type = this.tokenList.get(0);
 			if (type instanceof IntTypeToken) {
-				this.vars.addVar(new IntegerToken(), name);
+				BeanInterpreter.variables.addVar(new IntegerToken(), name);
 			} else if (type instanceof DoubleTypeToken) {
-				this.vars.addVar(new DoubleToken(), name);
+				BeanInterpreter.variables.addVar(new DoubleToken(), name);
 			} else if (type instanceof StrTypeToken) {
-				this.vars.addVar(new StringToken(), name);
+				BeanInterpreter.variables.addVar(new StringToken(), name);
 			} else if (type instanceof CharTypeToken) {
-				this.vars.addVar(new CharacterToken(), name);
+				BeanInterpreter.variables.addVar(new CharacterToken(), name);
 			} else if (type instanceof BoolTypeToken) {
-				this.vars.addVar(new FalseToken(), name);
+				BeanInterpreter.variables.addVar(new FalseToken(), name);
 			} else {
-				this.exception("Unidentified type");
+				BeanInterpreter.exception("Unidentified type");
 			}
 		}
 		//variable declaration and assignment
@@ -90,56 +86,56 @@ public class BeanParser {
 			Token type = this.tokenList.get(0);
 			if (type instanceof IntTypeToken) {
 				if (out instanceof IntegerToken) {
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else if (out instanceof DoubleToken) {
-					this.exception("Lossy conversion - type double to int");
+					BeanInterpreter.exception("Lossy conversion - type double to int");
 				} else if (out instanceof CharacterToken) {
 					int value = ((CharacterToken)out).value;
 					out = new IntegerToken(value);
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else if (type instanceof DoubleTypeToken) {
 				if (out instanceof IntegerToken) {
 					double value = ((IntegerToken)out).value;
 					out = new DoubleToken(value);
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else if (out instanceof DoubleToken) {
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else if (out instanceof CharacterToken) {
 					double value = ((CharacterToken)out).value;
 					out = new DoubleToken(value);
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else if (type instanceof StrTypeToken) {
 				if (out instanceof StringToken) {
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else {
-					this.exception("Invalid type conversion");
+					BeanInterpreter.exception("Invalid type conversion");
 				}
 			} else if (type instanceof CharTypeToken) {
 				if (out instanceof IntegerToken) {
 					char value = (char)(((IntegerToken)out).value);
 					out = new CharacterToken(value);
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else if (out instanceof CharacterToken) {
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else if (type instanceof BoolTypeToken) {
 				if (out instanceof TrueToken) {
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else if (out instanceof FalseToken) {
-					this.vars.addVar(out, name);
+					BeanInterpreter.variables.addVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else {
-				this.exception("Unidentified type");
+				BeanInterpreter.exception("Unidentified type");
 			}
 		}
 		//variable assignment
@@ -150,63 +146,63 @@ public class BeanParser {
 			}
 			Token out = expr(expression);
 			String name = ((VariableToken)this.tokenList.get(0)).value;
-			Token type = this.vars.getVar(name);
+			Token type = BeanInterpreter.variables.getVar(name);
 			if (type instanceof IntegerToken) {
 				if (out instanceof IntegerToken) {
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else if (out instanceof DoubleToken) {
-					this.exception("Lossy conversion - type double to int");
+					BeanInterpreter.exception("Lossy conversion - type double to int");
 				} else if (out instanceof CharacterToken) {
 					int value = ((CharacterToken)out).value;
 					out = new IntegerToken(value);
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else if (type instanceof DoubleToken) {
 				if (out instanceof IntegerToken) {
 					double value = ((IntegerToken)out).value;
 					out = new DoubleToken(value);
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else if (out instanceof DoubleToken) {
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else if (out instanceof CharacterToken) {
 					double value = ((CharacterToken)out).value;
 					out = new DoubleToken(value);
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else if (type instanceof StringToken) {
 				if (out instanceof StringToken) {
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else {
-					this.exception("Invalid type conversion");
+					BeanInterpreter.exception("Invalid type conversion");
 				}
 			} else if (type instanceof CharacterToken) {
 				if (out instanceof IntegerToken) {
 					char value = (char)(((IntegerToken)out).value);
 					out = new CharacterToken(value);
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else if (out instanceof CharacterToken) {
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else if (type instanceof TrueToken || type instanceof FalseToken) {
 				if (out instanceof TrueToken) {
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else if (out instanceof FalseToken) {
-					this.vars.setVar(out, name);
+					BeanInterpreter.variables.setVar(out, name);
 				} else {
-					this.exception("Invalid type coversion");
+					BeanInterpreter.exception("Invalid type coversion");
 				}
 			} else {
-				this.exception("Unidentified type");
+				BeanInterpreter.exception("Unidentified type");
 			}
 		}
 		else {
-			this.exception("BAD STATEMENT");
+			BeanInterpreter.exception("BAD STATEMENT");
 		}
 	}
 	
@@ -216,7 +212,7 @@ public class BeanParser {
 		//VARIABLE REMOVAL
 		index = findVars(expression);
 		while (index != -1) {
-			Token replace = this.vars.getVar(((VariableToken)expression.get(index)).value);
+			Token replace = BeanInterpreter.variables.getVar(((VariableToken)expression.get(index)).value);
 			expression.set(index, replace);
 			index = findVars(expression);
 		}
@@ -269,7 +265,7 @@ public class BeanParser {
 					expression.remove(index + 1);
 					expression.remove(index - 1);
 				} else {
-					this.exception("Bad type for binary operator '**'");
+					BeanInterpreter.exception("Bad type for binary operator '**'");
 				}		
 			} else if (one instanceof DoubleToken) {
 				if (two instanceof IntegerToken) {
@@ -288,7 +284,7 @@ public class BeanParser {
 					expression.remove(index + 1);
 					expression.remove(index - 1);
 				} else {
-					this.exception("Bad type for binary operator '**'");
+					BeanInterpreter.exception("Bad type for binary operator '**'");
 				}
 			} else if (one instanceof CharacterToken) {
 				if (two instanceof IntegerToken) {
@@ -307,10 +303,10 @@ public class BeanParser {
 					expression.remove(index + 1);
 					expression.remove(index - 1);
 				} else {
-					this.exception("Bad type for binary operator '**'");
+					BeanInterpreter.exception("Bad type for binary operator '**'");
 				}
 			} else {
-				this.exception("Bad type for binary operator '**'");
+				BeanInterpreter.exception("Bad type for binary operator '**'");
 			}
 			index = this.first15(expression);
 		}
@@ -349,7 +345,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '*'");
+						BeanInterpreter.exception("Bad type for binary operator '*'");
 					}		
 				} else if (one instanceof DoubleToken) {
 					if (two instanceof IntegerToken) {
@@ -368,7 +364,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '*'");
+						BeanInterpreter.exception("Bad type for binary operator '*'");
 					}
 				} else if (one instanceof StringToken) {
 					if (two instanceof IntegerToken) {
@@ -382,7 +378,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '*'");
+						BeanInterpreter.exception("Bad type for binary operator '*'");
 					}
 				} else if (one instanceof CharacterToken) {
 					if (two instanceof IntegerToken) {
@@ -401,10 +397,10 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '*'");
+						BeanInterpreter.exception("Bad type for binary operator '*'");
 					}
 				} else {
-					this.exception("Bad type for binary operator '*'");
+					BeanInterpreter.exception("Bad type for binary operator '*'");
 				}
 			}
 			//DIVIDE
@@ -426,7 +422,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)47 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
 					}		
 				} else if (one instanceof DoubleToken) {
 					if (two instanceof IntegerToken) {
@@ -445,7 +441,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)47 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
 					}
 				} else if (one instanceof CharacterToken) {
 					if (two instanceof IntegerToken) {
@@ -464,10 +460,10 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)47 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
 					}
 				} else {
-					this.exception("Bad type for binary operator '" + (char)47 + "'");
+					BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
 				}
 			}
 			//MOD
@@ -489,7 +485,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)37 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
 					}		
 				} else if (one instanceof DoubleToken) {
 					if (two instanceof IntegerToken) {
@@ -508,7 +504,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)37 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
 					}
 				} else if (one instanceof CharacterToken) {
 					if (two instanceof IntegerToken) {
@@ -527,10 +523,10 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)37 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
 					}
 				} else {
-					this.exception("Bad type for binary operator '" + (char)37 + "'");
+					BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
 				}
 			}
 			index = this.first12(expression);
@@ -565,7 +561,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '+'");
+						BeanInterpreter.exception("Bad type for binary operator '+'");
 					}
 				} else if (one instanceof DoubleToken) {
 					if (two instanceof IntegerToken) {
@@ -589,7 +585,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '+'");
+						BeanInterpreter.exception("Bad type for binary operator '+'");
 					}
 				} else if (one instanceof StringToken) {
 					if (two instanceof IntegerToken) {
@@ -623,7 +619,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '+'");
+						BeanInterpreter.exception("Bad type for binary operator '+'");
 					}
 				} else if (one instanceof CharacterToken) {
 					if (two instanceof IntegerToken) {
@@ -647,7 +643,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '" + (char)47 + "'");
+						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
 					}
 				} else if (one instanceof TrueToken) {
 					if (two instanceof StringToken) {
@@ -656,7 +652,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '+'");
+						BeanInterpreter.exception("Bad type for binary operator '+'");
 					}
 				} else if (one instanceof FalseToken) {
 					if (two instanceof StringToken) {
@@ -665,10 +661,10 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '+'");
+						BeanInterpreter.exception("Bad type for binary operator '+'");
 					}
 				} else {
-					this.exception("Bad type for binary operator '+'");
+					BeanInterpreter.exception("Bad type for binary operator '+'");
 				}
 			}
 			//SUBTRACTING
@@ -685,7 +681,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '-'");
+						BeanInterpreter.exception("Bad type for binary operator '-'");
 					}	
 				} else if (one instanceof DoubleToken) {
 					if (two instanceof IntegerToken) {
@@ -699,7 +695,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '-'");
+						BeanInterpreter.exception("Bad type for binary operator '-'");
 					}	
 				} else if (one instanceof CharacterToken) {
 					if (two instanceof IntegerToken) {
@@ -718,16 +714,16 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						this.exception("Bad type for binary operator '-'");
+						BeanInterpreter.exception("Bad type for binary operator '-'");
 					}
 				} else {
-					this.exception("Bad type for binary operator '-'");
+					BeanInterpreter.exception("Bad type for binary operator '-'");
 				}
 			}
 			index = this.first11(expression);
 		}
 		if (expression.size() > 1) {
-			this.exception("BAD STATEMENT");
+			BeanInterpreter.exception("BAD STATEMENT");
 		}
 		return expression.get(0);
 	}
@@ -753,7 +749,7 @@ public class BeanParser {
 			}
 		}
 		if (open != close) {
-			this.exception("Unmatched parentheses");
+			BeanInterpreter.exception("Unmatched parentheses");
 		}
 	}
 	
@@ -775,7 +771,7 @@ public class BeanParser {
 				return i;
 			}
 		}
-		this.exception("Unmatched parentheses");
+		BeanInterpreter.exception("Unmatched parentheses");
 		return -1;
 	}
 	
@@ -804,11 +800,5 @@ public class BeanParser {
 			}
 		}
 		return -1;
-	}
-	
-	private void exception(String s) {
-		System.out.print("Line " + this.lineNum + ": ");
-		System.out.println(s);
-		System.exit(0);
 	}
 }

@@ -31,7 +31,7 @@ public class BeanInterpreter {
 					continue;
 				}
 				tokensLine = new ArrayList<Token>();
-				lexer = new BeanLexer(line, tokensLine, lineNum);
+				lexer = new BeanLexer(line);
 				lexer.run();
 				
 				Token curToken = tokensLine.get(0);
@@ -51,7 +51,7 @@ public class BeanInterpreter {
 						tokensLine.remove(0);
 						prevToken = curToken;
 						curToken = tokensLine.get(0);
-						parser = new BeanParser(tokensStatement, variables, lineNum);
+						parser = new BeanParser(tokensStatement);
 						parser.run();
 						tokensStatement = new ArrayList<Token>();
 						continue;

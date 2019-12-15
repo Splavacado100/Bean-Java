@@ -1,3 +1,8 @@
-int foo = 3;
-print(foo);
-print(foo);
+double foo = 4 + 12;
+print(foo * 6);
+
+foo = foo / 8;
+
+double foobar = 5.0;
+foo = foo ** foobar;
+print("" + 'c' + true + foo);
