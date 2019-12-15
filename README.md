@@ -44,14 +44,18 @@ ctrue32.0
 ```
 
 Things to work on:
-  -Typecasting: This will allow doubles to be converted to integer types
-  -Comparison, logical, and bitwise operators: It'll expand more of the options the programmer has
-  -If, for, and while loops: A crucial part of making the coding not just linear
-  -Functions: Brings the high-level structure of most modern languages, i.e. not goto
-  -Arrays, lists, stacks, and queues
-    -I havent decided if I want the "list" type to be bounded of unbounded
-    -I know I at least want same type and passed by reference
-    -It's easy, so stacks and queues are going to become built-in data types
+-Typecasting
+ -This will allow doubles to be converted to integer types
+-Comparison, logical, and bitwise operators
+ -It'll expand more of the options the programmer has
+-If, for, and while loops
+ -A crucial part of making the coding not just linear
+-Functions
+ -Brings the high-level structure of most modern languages, i.e. not goto
+-Arrays, lists, stacks, and queues
+ -I havent decided if I want the "list" type to be bounded of unbounded
+ -I know I at least want same type and passed by reference
+ -It's easy, so stacks and queues are going to become built-in data types
 
 If you have any questions, comments, or suggestions about any of the code, email me at splavacado100@gmail.com
 
