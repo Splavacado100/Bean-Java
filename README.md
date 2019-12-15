@@ -23,7 +23,7 @@ Much like Java, chars are treated as integers when operated on with other intege
 with '+' tacking on the literal representation of the type, as well as `INT * STR` creating a repeated string.
 
 Variables do exist, they be declared, assigned, and changed. The names must start with a letter,
-and can contain letters of '_'. To be honest, I've been pushing off numbers in variable names to focus on more higher up
+and can contain letters or '_'. To be honest, I've been pushing off numbers in variable names to focus on more higher up
 things, but I'll get to it. Typecasting isn't a thing yet, so right now there is no way to turn a double into an integer.
 
 ### SAMPLE PROGRAM:
