@@ -20,14 +20,14 @@ Current primitive data types are: (char)acter, (str)ing, (int)eger, double, and 
 Current binary operators are: '+', '-', '*', '/', '%', and '**'(exponent)
 
 Much like Java, chars are treated as integers when operated on with other integers. String operaters have been created,
-with '+' tacking on the literal representation of the type, as well as 'INT * STR' creating a repeated string.
+with '+' tacking on the literal representation of the type, as well as `INT * STR` creating a repeated string.
 
 Variables do exist, they be declared, assigned, and changed. The names must start with a letter,
 and can contain letters of '_'. To be honest, I've been pushing off numbers in variable names to focus on more higher up
 things, but I'll get to it. Typecasting isn't a thing yet, so right now there is no way to turn a double into an integer.
 
 ### SAMPLE PROGRAM:
-'''
+```
 int foo = 4 + 12;
 print(foo * 6);
 
@@ -36,12 +36,12 @@ foo = foo / 8;
 double foobar = 5.0;
 foo = foo ** foobar;
 print("" + 'c' + true + foo);
-'''
+```
 ### OUTPUT:
-'''
+```
 96
 ctrue32.0
-'''
+```
 
 Things to work on:
   -Typecasting: This will allow doubles to be converted to integer types
