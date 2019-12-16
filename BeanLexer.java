@@ -220,9 +220,11 @@ public class BeanLexer {
 				if (name.equals("char")) {
 					return new CharTypeToken();
 				}
+				/*
 				if (name.equals("func")) {
 					return new FuncTypeToken();
 				}
+				*/
 				return new VariableToken(name);
 			}
 			if (this.currentChar == '(') {
