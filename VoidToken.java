@@ -6,6 +6,6 @@ public class VoidToken extends Token {
 	}
 	
 	public String toString() {
-		return this.type;
+		return this.value;
 	}
 }

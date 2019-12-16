@@ -4,8 +4,4 @@ public class EmptyToken extends Token {
 	public EmptyToken() {
 		super("END");
 	}
-	
-	public String toString() {
-		return this.type + ": " + this.value;
-	}
 }

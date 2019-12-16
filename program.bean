@@ -6,3 +6,4 @@ foo = foo / 8;
 double foobar = 5.0;
 foo = foo ** foobar;
 print("" + 'c' + true + foo);
+print((int)5.0);

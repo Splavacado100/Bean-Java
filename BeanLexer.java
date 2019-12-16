@@ -209,10 +209,10 @@ public class BeanLexer {
 					return new BoolTypeToken();
 				}
 				if (name.equals("true")) {
-					return new TrueToken();
+					return new BooleanToken(true);
 				}
 				if (name.equals("false")) {
-					return new FalseToken();
+					return new BooleanToken(false);
 				}
 				if (name.equals("str")) {
 					return new StrTypeToken();

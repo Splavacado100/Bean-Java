@@ -42,4 +42,70 @@ public class DatatypeDict {
 			return new EOFToken();
 		}
 	}
+	
+	public static Token toChar(Token token) {
+		if (token instanceof IntegerToken) {
+			int val = ((IntegerToken)token).value;
+			return new CharacterToken((char)val);
+		} else if (token instanceof DoubleToken) {
+			int val = (int)(((DoubleToken)token).value);
+			return new CharacterToken((char)val);
+		} else if (token instanceof StringToken) {
+			BeanInterpreter.exception("str cannot be converted to char");
+			return new EOFToken();
+		} else if (token instanceof CharacterToken) {
+			return token;
+		} else if (token instanceof BooleanToken) {
+			BeanInterpreter.exception("bool cannot be converted to char");
+			return new EOFToken();
+		} else {
+			//I don't know what cases would cause it to reach this state
+			BeanInterpreter.exception("Unknown error");
+			return new EOFToken();
+		}
+	}
+	
+	public static Token toInt(Token token) {
+		if (token instanceof IntegerToken) {
+			return token;
+		} else if (token instanceof DoubleToken) {
+			double val = ((DoubleToken)token).value;
+			return new IntegerToken((int)val);
+		} else if (token instanceof StringToken) {
+			BeanInterpreter.exception("str cannot be converted to int");
+			return new EOFToken();
+		} else if (token instanceof CharacterToken) {
+			char val = ((CharacterToken)token).value;
+			return new IntegerToken((int)val);
+		} else if (token instanceof BooleanToken) {
+			BeanInterpreter.exception("bool cannot be converted to int");
+			return new EOFToken();
+		} else {
+			//I don't know what cases would cause it to reach this state
+			BeanInterpreter.exception("Unknown error");
+			return new EOFToken();
+		}
+	}
+	
+	public static Token toDouble(Token token) {
+		if (token instanceof IntegerToken) {
+			int val = ((IntegerToken)token).value;
+			return new DoubleToken((double)val);
+		} else if (token instanceof DoubleToken) {
+			return token;
+		} else if (token instanceof StringToken) {
+			BeanInterpreter.exception("str cannot be converted to double");
+			return new EOFToken();
+		} else if (token instanceof CharacterToken) {
+			char val = ((CharacterToken)token).value;
+			return new DoubleToken((double)val);
+		} else if (token instanceof BooleanToken) {
+			BeanInterpreter.exception("bool cannot be converted to double");
+			return new EOFToken();
+		} else {
+			//I don't know what cases would cause it to reach this state
+			BeanInterpreter.exception("Unknown error");
+			return new EOFToken();
+		}
+	}
 }

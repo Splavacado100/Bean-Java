@@ -4,8 +4,4 @@ public class EOFToken extends Token {
 	public EOFToken() {
 		super("NULL");
 	}
-	
-	public String toString() {
-		return this.type;
-	}
 }

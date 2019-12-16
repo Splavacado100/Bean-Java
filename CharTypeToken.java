@@ -5,10 +5,6 @@ public class CharTypeToken extends Token {
 		super("TYPE");
 	}
 	
-	public String toString() {
-		return this.type + ": " + this.value;
-	}
-	
 	public String value() {
 		return this.value;
 	}

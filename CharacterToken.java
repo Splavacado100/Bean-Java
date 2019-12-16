@@ -12,6 +12,6 @@ public class CharacterToken extends Token {
 	}
 	
 	public String toString() {
-		return this.type + ": " + this.value;
+		return "" + this.value;
 	}
 }

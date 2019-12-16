@@ -5,8 +5,4 @@ public class VariableToken extends Token {
 		super("VARIABLE");
 		this.value = value;
 	}
-	
-	public String toString() {
-		return this.type + ": " + this.value;
-	}
 }

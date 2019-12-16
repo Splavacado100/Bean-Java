@@ -4,8 +4,4 @@ public class EOLToken extends Token {
 	public EOLToken() {
 		super("NEXTLINE");
 	}
-	
-	public String toString() {
-		return this.type;
-	}
 }

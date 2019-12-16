@@ -25,39 +25,12 @@ public class BeanParser {
 				System.out.println(((StringToken)out).value);
 			} else if (out instanceof CharacterToken) {
 				System.out.println(((CharacterToken)out).value);
-			} else if (out instanceof TrueToken) {
-				System.out.println("true");
-			} else if (out instanceof FalseToken) {
-				System.out.println("false");
+			} else if (out instanceof BooleanToken) {
+				System.out.println(((BooleanToken)out).value);
 			} else {
 				BeanInterpreter.exception("BAD TYPE");
 			}
 		}
-		/*
-		else if (this.tokenList.get(0) instanceof PrintlnToken && this.tokenList.get(1) instanceof OpenParenthesesToken && this.tokenList.get(this.size - 2) instanceof ClosedParenthesesToken && this.tokenList.get(this.size - 1) instanceof EmptyToken) {
-			ArrayList<Token> expression = new ArrayList<Token>();
-			for (int i = 2; i < this.size - 2; i++) {
-				expression.add(tokenList.get(i));
-			}
-			Token out = expr(expression);
-			if (out instanceof IntegerToken) {
-				System.out.println(((IntegerToken)out).value);
-			} else if (out instanceof DoubleToken) {
-				System.out.println(((DoubleToken)out).value);
-			} else if (out instanceof StringToken) {
-				System.out.println(((StringToken)out).value);
-			} else if (out instanceof CharacterToken) {
-				System.out.println(((CharacterToken)out).value);
-			} else if (out instanceof TrueToken) {
-				System.out.println("true");
-			} else if (out instanceof FalseToken) {
-				System.out.println("false");
-			} else {
-				BeanInterpreter.exception("BAD TYPE");
-			}
-		}
-		*/
-		//variable declaration with default assignment
 		else if (this.tokenList.get(0).type.equals("TYPE") && this.tokenList.get(1) instanceof VariableToken && this.tokenList.get(2) instanceof EmptyToken && this.tokenList.get(tokenList.size() - 1) instanceof EmptyToken) {
 			String name = ((VariableToken)this.tokenList.get(1)).value;
 			Token type = this.tokenList.get(0);
@@ -227,6 +200,11 @@ public class BeanParser {
 		open = this.findOpen(expression);
 		closed = this.findClosed(expression, open);
 		while (open != -1) {
+			if (expression.get(open + 1).type.equals("TYPE")) {
+				open = this.findOpen(expression, open - 1);
+				closed = this.findClosed(expression, open);
+				continue;
+			}
 			temp = new ArrayList<Token>();
 			for (int i = open + 1; i < closed; i++) {
 				temp.add(expression.get(i));
@@ -309,6 +287,32 @@ public class BeanParser {
 				BeanInterpreter.exception("Bad type for binary operator '**'");
 			}
 			index = this.first15(expression);
+		}
+		
+		//TYPECASTING
+		index = this.first13(expression);
+		while (index != -1) {
+			System.out.println(index);
+			if (!(expression.get(index - 1) instanceof OpenParenthesesToken && expression.get(index + 1) instanceof ClosedParenthesesToken)) {
+				BeanInterpreter.exception("To typecast, the type must be enclosed in parentheses");
+			}
+			switch(expression.get(index).type) {
+				case "CHAR":
+					expression.set(index + 2, DatatypeDict.toChar(expression.get(index + 2)));
+					break;
+				case "INT":
+					expression.set(index + 2, DatatypeDict.toInt(expression.get(index + 2)));
+					break;
+				case "DOUBLE":
+					expression.set(index + 2, DatatypeDict.toDouble(expression.get(index + 2)));
+					break;
+				default:
+					BeanInterpreter.exception("Bad typecasting type");
+			}
+			expression.remove(index - 1);
+			expression.remove(index - 1);
+			expression.remove(index - 1);
+			index = this.first12(expression);
 		}
 		
 		//MULTIPLICATION, DIVISION, AND MOD
@@ -551,7 +555,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else if (two instanceof StringToken) {
-						String newValue = ((IntegerToken)one).value + ((StringToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
@@ -561,7 +565,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else {
-						BeanInterpreter.exception("Bad type for binary operator '+'");
+						BeanInterpreter.exception("Bad type for binary 0operator '+'");
 					}
 				} else if (one instanceof DoubleToken) {
 					if (two instanceof IntegerToken) {
@@ -589,32 +593,27 @@ public class BeanParser {
 					}
 				} else if (one instanceof StringToken) {
 					if (two instanceof IntegerToken) {
-						String newValue = ((StringToken)one).value + ((IntegerToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else if (two instanceof DoubleToken) {
-						String newValue = ((StringToken)one).value + ((DoubleToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else if (two instanceof StringToken) {
-						String newValue = ((StringToken)one).value + ((StringToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else if (two instanceof CharacterToken) {
-						String newValue = ((StringToken)one).value + ((CharacterToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
-					} else if (two instanceof TrueToken) {
-						String newValue = ((StringToken)one).value + "true";
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof FalseToken) {
-						String newValue = ((StringToken)one).value + "false";
+					} else if (two instanceof BooleanToken) {
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
@@ -633,7 +632,7 @@ public class BeanParser {
 						expression.remove(index + 1);
 						expression.remove(index - 1);
 					} else if (two instanceof StringToken) {
-						String newValue = ((CharacterToken)one).value + ((StringToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
@@ -645,18 +644,9 @@ public class BeanParser {
 					} else {
 						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
 					}
-				} else if (one instanceof TrueToken) {
+				} else if (one instanceof BooleanToken) {
 					if (two instanceof StringToken) {
-						String newValue = "true" + ((StringToken)two).value;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '+'");
-					}
-				} else if (one instanceof FalseToken) {
-					if (two instanceof StringToken) {
-						String newValue = "false" + ((StringToken)two).value;
+						String newValue = "" + one + two;
 						expression.set(index, new StringToken(newValue));
 						expression.remove(index + 1);
 						expression.remove(index - 1);
@@ -762,6 +752,15 @@ public class BeanParser {
 		return -1;
 	}
 	
+	private int findOpen(ArrayList<Token> exprTokenList, int start) {
+		for (int i = start; i >= 0; i--) {
+			if (exprTokenList.get(i) instanceof OpenParenthesesToken) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	private int findClosed(ArrayList<Token> exprTokenList, int start) {
 		if (start == -1) {
 			return -1;
@@ -778,6 +777,15 @@ public class BeanParser {
 	private int first15(ArrayList<Token> exprTokenList) {
 		for (int i = 0; i < exprTokenList.size(); i++) {
 			if (exprTokenList.get(i) instanceof ExpoToken) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private int first13(ArrayList<Token> exprTokenList) {
+		for (int i = 0; i < exprTokenList.size(); i++) {
+			if (exprTokenList.get(i).type.equals("TYPE")) {
 				return i;
 			}
 		}
