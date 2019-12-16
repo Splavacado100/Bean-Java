@@ -28,7 +28,7 @@ things, but I'll get to it. Typecasting isn't a thing yet, so right now there is
 
 ### SAMPLE PROGRAM:
 ```
-int foo = 4 + 12;
+double foo = 4 + 12;
 print(foo * 6);
 
 foo = foo / 8;
@@ -39,7 +39,7 @@ print("" + 'c' + true + foo);
 ```
 ### OUTPUT:
 ```
-96
+96.0
 ctrue32.0
 ```
 
