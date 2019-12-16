@@ -3,13 +3,11 @@ Java interpreter for the custom language of Bean
 
 ## TO RUN .BEAN FILES
 
-Right now, the .bean file needs to be in the same directory as all the other files. I am still learning the syntax of Java,
-if anyone knows how to set up the files to create a bean run command from any directory, let me know.
+#### Running a text file as a Bean program
+Save your program in a text file with any name, for example "myProgram.txt". When the text file is in the same directory as all the .java files, run the command `java BeanInterpreter myProgram.txt` from that directory. **It is important to have .txt at the end,** otherwise the interpreter will look for myProgram.bean
 
-The run command for Mac:
-  java BeanInterpreter program
-
-This will run the file program.bean, to run a different file, change the filename in the command
+#### Running a Bean program from Geany-Mac
+In the folder "Setup Files" you'll find another folder named "Geany-Mac". In it will be a configuration file named "filetypes.Bean.conf". This file creates the syntax highlight for Bean as well as the build commands to run it. Move filetypes.Bean.conf to the folder /Applications/Geany.app/Contents/Resources/share/geany/filedefs. To get to this folder, you'll have to view package contents of your Geany application. In the folder right above (/Applications/Geany.app/Contents/Resources/share/geany), there is a file name "filetype_extensions.conf". Open it, and add the line `Bean=*.bean;` to the file right after the line `Batch=*.bat;*.cmd;*.nt;`. This addition is to help Geany recognize the .bean file as a Bean program. Now scroll down to the end, you should see a line that looks something like: `Script=Graphviz;`. Add `Bean;` to the end of this line (the whole line should look like `Script=Graphviz;Bean;`), this adds Bean to the scripting language category. For these changes to take effect, you have to quit Geany and open it back up again. After that, everything should work! Run your first Bean program by pressing `fn+f5`!
 
 ## SYNTAX
 
