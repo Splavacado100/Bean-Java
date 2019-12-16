@@ -16,7 +16,10 @@ public class BeanInterpreter {
 	public static DatatypeDict variables = new DatatypeDict();
 	
 	public static void main(String[] args) throws Exception {
-		prg = new File(args[0] + ".bean");
+		if (!(args[0].substring(args[0].length() - 4, args[0].length())).equals(".txt")) {
+			args[0] += ".bean";
+		}
+		prg = new File(args[0]);
 		scn = new Scanner(prg);
 		
 		BeanLexer lexer;
