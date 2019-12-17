@@ -303,8 +303,24 @@ public class BeanLexer {
 					return new EqualsToken();
 				}
 			}
-			if (this.currentChar == '!' && this.line.charAt(this.pos + 1) == '=') {
-				return new NotEqualsToken();
+			if (this.currentChar == '!') {
+				this.advance();
+				if (this.currentChar == '=') {
+					this.advance();
+					return new NotEqualsToken();
+				} else {
+					return new NotToken();
+				}
+			}
+			if (this.currentChar == '&' && this.line.charAt(this.pos + 1) == '&') {
+				this.advance();
+				this.advance();
+				return new AndToken();
+			}
+			if (this.currentChar == '|' && this.line.charAt(this.pos + 1) == '|') {
+				this.advance();
+				this.advance();
+				return new OrToken();
 			}
 			if (this.currentChar == '<') {
 				this.advance();

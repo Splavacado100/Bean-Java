@@ -11,7 +11,4 @@ foo += 14;
 
 print("" + (char)c + true + foo);
 
-print(c > foo);
-
-str s = "Hi";
-print(s == "Hi");
+print(!(c > foo) || foo > foobar);

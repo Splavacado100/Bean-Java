@@ -176,6 +176,21 @@ public class BeanParser {
 			closed = this.findClosed(expression, open);
 		}
 		
+		//not
+		index = first14(expression);
+		while (index != -1) {
+			Token out = expression.get(index + 1);
+			Token outNew = DatatypeDict.aBool(out);
+			if (outNew instanceof EOFToken) {
+				BeanInterpreter.exception(out.type + " must be type BOOLEAN");
+			}
+			boolean newVal = !((BooleanToken)outNew).value;
+			expression.remove(index);
+			expression.set(index, new BooleanToken(newVal));
+			index = first14(expression);
+			
+		}
+		
 		//casting
 		index = first13(expression);
 		while (index != -1) {
@@ -585,8 +600,51 @@ public class BeanParser {
 			index = this.first8(expression);
 		}
 		
+		//AND
+		index = this.first4(expression);
+		while (index != -1) {
+			one = expression.get(index - 1);
+			two = expression.get(index + 1);
+			
+			Token oneNew = DatatypeDict.aBool(one);
+			Token twoNew = DatatypeDict.aBool(two);
+			
+			if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+				BeanInterpreter.exception(one.type + " cannot be ANDed by " + two.type);
+			}
+			
+			boolean newVal = ((BooleanToken)oneNew).value && ((BooleanToken)twoNew).value;
+			
+			expression.set(index, new BooleanToken(newVal));
+			
+			expression.remove(index + 1);
+			expression.remove(index - 1);
+			index = this.first4(expression);
+		}
+		
+		//OR
+		index = this.first3(expression);
+		while (index != -1) {
+			one = expression.get(index - 1);
+			two = expression.get(index + 1);
+			
+			Token oneNew = DatatypeDict.aBool(one);
+			Token twoNew = DatatypeDict.aBool(two);
+			
+			if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+				BeanInterpreter.exception(one.type + " cannot be ORed by " + two.type);
+			}
+			
+			boolean newVal = ((BooleanToken)oneNew).value || ((BooleanToken)twoNew).value;
+			
+			expression.set(index, new BooleanToken(newVal));
+			
+			expression.remove(index + 1);
+			expression.remove(index - 1);
+			index = this.first3(expression);
+		}
+		
 		if (expression.size() > 1) {
-			//System.out.println(expression);
 			BeanInterpreter.exception("BAD STATEMENT");
 		}
 		return expression.get(0);
@@ -648,6 +706,15 @@ public class BeanParser {
 		return -1;
 	}
 	
+	private int first14(ArrayList<Token> exprTokenList) {
+		for (int i = 0; i < exprTokenList.size(); i++) {
+			if (exprTokenList.get(i) instanceof NotToken) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
 	private int first13(ArrayList<Token> exprTokenList) {
 		for (int i = 0; i < exprTokenList.size(); i++) {
 			if (exprTokenList.get(i).type.equals("TYPE")) {
@@ -687,6 +754,24 @@ public class BeanParser {
 	private int first8(ArrayList<Token> exprTokenList) {
 		for (int i = 0; i < exprTokenList.size(); i++) {
 			if (exprTokenList.get(i).type.equals("TST")) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private int first4(ArrayList<Token> exprTokenList) {
+		for (int i = 0; i < exprTokenList.size(); i++) {
+			if (exprTokenList.get(i) instanceof AndToken) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private int first3(ArrayList<Token> exprTokenList) {
+		for (int i = 0; i < exprTokenList.size(); i++) {
+			if (exprTokenList.get(i) instanceof OrToken) {
 				return i;
 			}
 		}

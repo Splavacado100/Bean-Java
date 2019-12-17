@@ -106,6 +106,18 @@ public class DatatypeDict {
 		}
 	}
 	
+	public static Token aBool(Token token) {
+		if (token instanceof BooleanToken) {
+			return token;
+		}
+		else {
+			//Integer-Invalid
+			//Double-Invalid
+			//String-Invalid
+			//Character-Invalids
+			return new EOFToken();
+		}
+	}
 	
 	//Typecast: Manual narrowing
 	
@@ -178,7 +190,7 @@ public class DatatypeDict {
 		else {
 			//String-Invalid
 			//Boolean-Invalid
-			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to INTEGER");
+			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to CHARACTER");
 			return new EOFToken();
 		}
 	}
@@ -192,7 +204,7 @@ public class DatatypeDict {
 			//Double-Invalid
 			//String-Invalid
 			//Character-Invalid
-			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to STRING");
+			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to BOOLEAN");
 			return new EOFToken();
 		}
 	}
@@ -261,7 +273,7 @@ public class DatatypeDict {
 		}
 		else if (token instanceof DoubleToken) {
 			//Lossy Conversion
-			BeanInterpreter.exception("Lossy conversion: DOUBLE to CHAR");
+			BeanInterpreter.exception("Lossy conversion: DOUBLE to CHARACTER");
 			return new EOFToken();
 		}
 		else if (token instanceof CharacterToken) {
@@ -270,7 +282,7 @@ public class DatatypeDict {
 		else {
 			//String-Invalid
 			//Boolean-Invalid
-			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to INTEGER");
+			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to CHARACTER");
 			return new EOFToken();
 		}
 	}
@@ -284,7 +296,7 @@ public class DatatypeDict {
 			//Double-Invalid
 			//String-Invalid
 			//Character-Invalid
-			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to STRING");
+			BeanInterpreter.exception("Invalid conversion type: " + token.type + " to BOOLEAN");
 			return new EOFToken();
 		}
 	}
