@@ -38,16 +38,23 @@ int c = 99;
 foo += 14;
 
 print("" + (char)c + true + foo);
+
+print(c > foo);
+
+str s = "Hi";
+print(s == "Hi");
 ```
 ### OUTPUT:
 ```
 96.0
 ctrue24
+true
+true
 ```
 
 ### Things to work on:
 ```
--Comparison, logical, and bitwise operators
+-Logical and bitwise operators
 
    -It'll expand more of the options the programmer has
  
