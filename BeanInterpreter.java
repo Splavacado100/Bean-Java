@@ -48,6 +48,13 @@ public class BeanInterpreter {
 				boolean parseLine = true;
 				
 				while (parseLine) {
+					if (curToken instanceof WhileToken) {
+						parser = new BeanParser(tokensLine);
+						parser.run();
+						tokensStatement = new ArrayList<Token>();
+						parseLine = false;
+						break;
+					}
 					if (curToken instanceof EOLToken) {
 						if (prevToken instanceof EmptyToken) {
 							parseLine = false;

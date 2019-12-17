@@ -215,6 +215,9 @@ public class BeanLexer {
 				if (name.equals("char")) {
 					return new CharTypeToken();
 				}
+				if (name.equals("while")) {
+					return new WhileToken();
+				}
 				return new VariableToken(name);
 			}
 			if (this.currentChar == '(') {
