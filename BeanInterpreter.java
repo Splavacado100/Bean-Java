@@ -8,6 +8,7 @@ public class BeanInterpreter {
 	public static int curScope = 0;
 	public static String line;
 	public static ArrayList<String> lines = new ArrayList<String>();
+	public static ArrayList<Integer> scopeLines = new ArrayList<Integer>();
 	
 	public static File prg;
 	public static Scanner scn;
@@ -21,6 +22,7 @@ public class BeanInterpreter {
 		if (!(args[0].substring(args[0].length() - 4, args[0].length())).equals(".txt")) {
 			args[0] += ".bean";
 		}
+		scopeLines.add(new Integer(0));
 		prg = new File(args[0]);
 		scn = new Scanner(prg);
 		
