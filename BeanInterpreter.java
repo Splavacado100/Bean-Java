@@ -5,6 +5,7 @@ import java.io.File;
 
 public class BeanInterpreter {
 	public static int lineNum = 1;
+	public static int curScope = 0;
 	public static String line;
 	
 	public static File prg;

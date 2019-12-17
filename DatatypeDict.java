@@ -3,6 +3,7 @@ import java.util.ArrayList;
 public class DatatypeDict {
 	public ArrayList<String> varNames = new ArrayList<String>();
 	public ArrayList<Token> varValues = new ArrayList<Token>();
+	public ArrayList<Integer> varScopes = new ArrayList<Integer>();
 	
 	public DatatypeDict() {}
 	
@@ -19,6 +20,7 @@ public class DatatypeDict {
 		if (this.findName(name) == -1) {
 			varNames.add(name);
 			varValues.add(value);
+			varScopes.add(BeanInterpreter.curScope);
 		} else {
 			BeanInterpreter.exception("Variable '" + name + "' has already been defined");
 		}
@@ -40,6 +42,16 @@ public class DatatypeDict {
 		} else {
 			BeanInterpreter.exception("Variable '" + name + "' has not been defined");
 			return new EOFToken();
+		}
+	}
+	
+	public static void gc() {
+		for (int i = 0; i < BeanInterpreter.variables.varScopes.size(); i++) {
+			if (BeanInterpreter.variables.varScopes.get(i).intValue() > BeanInterpreter.curScope) {
+				BeanInterpreter.variables.varNames.remove(i);
+				BeanInterpreter.variables.varValues.remove(i);
+				BeanInterpreter.variables.varScopes.remove(i);
+			}
 		}
 	}
 	
