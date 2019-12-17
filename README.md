@@ -22,7 +22,7 @@ with '+' tacking on the literal representation of the type.
 
 Variables do exist, they be declared, assigned, and changed. The names must start with a letter,
 and can contain letters or '_'. To be honest, I've been pushing off numbers in variable names to focus on more higher up
-things, but I'll get to it. Typecasting isn't a thing yet, so right now there is no way to turn a double into an integer.
+things, but I'll get to it.
 
 ### SAMPLE PROGRAM:
 ```
