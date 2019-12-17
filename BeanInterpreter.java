@@ -7,6 +7,7 @@ public class BeanInterpreter {
 	public static int lineNum = 1;
 	public static int curScope = 0;
 	public static String line;
+	public static ArrayList<String> lines = new ArrayList<String>();
 	
 	public static File prg;
 	public static Scanner scn;
@@ -23,11 +24,16 @@ public class BeanInterpreter {
 		prg = new File(args[0]);
 		scn = new Scanner(prg);
 		
+		while (scn.hasNextLine()) {
+			line = scn.nextLine();
+			lines.add(line);
+		}
+		
 		BeanLexer lexer;
 		BeanParser parser;
 		
-		while (scn.hasNextLine()) {
-			line = scn.nextLine();
+		while (lineNum <= lines.size()) {
+			line = lines.get(lineNum - 1);
 			
 			if (line.length() > 0) {
 				if (line.charAt(0) == 47 && line.charAt(1) == 47) {
