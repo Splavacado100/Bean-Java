@@ -39,7 +39,7 @@ public class BeanParser {
 			}
 		}
 		//variable declaration and assignment
-		else if (this.tokenList.get(0).type.equals("TYPE") && this.tokenList.get(1) instanceof VariableToken && this.tokenList.get(2).type.equals("ASSIGN") && this.tokenList.get(this.size - 1) instanceof EmptyToken) {
+		else if (this.tokenList.get(0).type.equals("TYPE") && this.tokenList.get(1) instanceof VariableToken && this.tokenList.get(2) instanceof EqualsToken && this.tokenList.get(this.size - 1) instanceof EmptyToken) {
 			ArrayList<Token> expression = new ArrayList<Token>();
 			for (int i = 3; i < this.size - 1; i++) {
 				expression.add(tokenList.get(i));
