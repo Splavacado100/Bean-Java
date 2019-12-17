@@ -15,38 +15,36 @@ Printing is done a la Python but a touch of Java, i.e. print(expression);
 print() function does carry a newline, in the future a formatted print statement will come without newline, i.e. printf()
 
 Current primitive data types are: (char)acter, (str)ing, (int)eger, double, and (bool)ean
-Current binary operators are: '+', '-', '*', '/', '%', and '**'(exponent)
+Current binary operators are: +, -, *, /, and %
 
 Much like Java, chars are treated as integers when operated on with other integers. String operaters have been created,
-with '+' tacking on the literal representation of the type, as well as `INT * STR` creating a repeated string.
+with '+' tacking on the literal representation of the type.
 
 Variables do exist, they be declared, assigned, and changed. The names must start with a letter,
 and can contain letters or '_'. To be honest, I've been pushing off numbers in variable names to focus on more higher up
-things, but I'll get to it. Typecasting isn't a thing yet, so right now there is no way to turn a double into an integer.
+things, but I'll get to it.
 
 ### SAMPLE PROGRAM:
 ```
-double foo = 4 + 12;
+int foo = 4 + 12;
 print(foo * 6);
 
 foo = foo / 8;
 
 double foobar = 5.0;
-foo = foo ** foobar;
-print("" + 'c' + true + foo);
+foo = foo * (int)foobar;
+int c = 99;
+
+print("" + (char)c + true + foo);
 ```
 ### OUTPUT:
 ```
 96.0
-ctrue32.0
+ctrue10
 ```
 
 ### Things to work on:
 ```
--Typecasting
-
-   -This will allow doubles to be converted to integer types
- 
 -Comparison, logical, and bitwise operators
 
    -It'll expand more of the options the programmer has
