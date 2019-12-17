@@ -296,7 +296,33 @@ public class BeanLexer {
 			}
 			if (this.currentChar == '=') {
 				this.advance();
-				return new EqualsToken();
+				if (this.currentChar == '=') {
+					this.advance();
+					return new EqualsEqualsToken();
+				} else {
+					return new EqualsToken();
+				}
+			}
+			if (this.currentChar == '!' && this.line.charAt(this.pos + 1) == '=') {
+				return new NotEqualsToken();
+			}
+			if (this.currentChar == '<') {
+				this.advance();
+				if (this.currentChar == '=') {
+					this.advance();
+					return new LessEqualsToken();
+				} else {
+					return new LessToken();
+				}
+			}
+			if (this.currentChar == '>') {
+				this.advance();
+				if (this.currentChar == '=') {
+					this.advance();
+					return new GreaterEqualsToken();
+				} else {
+					return new GreaterToken();
+				}
 			}
 			System.out.println("INTERPRETER ERROR: LEXXER");
 			BeanInterpreter.exception("Unknown char: " + this.currentChar);

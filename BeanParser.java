@@ -376,8 +376,217 @@ public class BeanParser {
 			expression.remove(index - 1);
 			index = this.first11(expression);
 		}
+		
+		//LESS/GTR THAN, LESS/GTR THAN OR EQUALS TO
+		index = this.first9(expression);
+		while (index != -1) {
+			one = expression.get(index - 1);
+			two = expression.get(index + 1);
+			//LESS THAN: <
+			if (expression.get(index) instanceof LessToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((DoubleToken)oneNew).value < ((DoubleToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value < ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value < ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else {
+					BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+				}
+			}
+			//GREATER THAN: >
+			else if (expression.get(index) instanceof GreaterToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((DoubleToken)oneNew).value > ((DoubleToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value > ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value > ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else {
+					BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+				}
+			}
+			//LESS THAN EQUALS: <=
+			else if (expression.get(index) instanceof LessToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((DoubleToken)oneNew).value <= ((DoubleToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value <= ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value <= ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else {
+					BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+				}
+			}
+			//GREATER THAN EQUALS: >=
+			else if (expression.get(index) instanceof GreaterToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((DoubleToken)oneNew).value >= ((DoubleToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value >= ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value >= ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else {
+					BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+				}
+			}
+			expression.remove(index + 1);
+			expression.remove(index - 1);
+			index = this.first9(expression);
+		}
+		
+		//EQUALS TO, NOT EQUALS TO
+		index = this.first8(expression);
+		while (index != -1) {
+			one = expression.get(index - 1);
+			two = expression.get(index + 1);
+			//EQUALS TO: ==
+			if (expression.get(index) instanceof EqualsEqualsToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((DoubleToken)oneNew).value == ((DoubleToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value == ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value == ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof StringToken && two instanceof StringToken) {
+					String oneNew = "" + one;
+					String twoNew = "" + two;
+					expression.set(index, new BooleanToken(oneNew.equals(twoNew)));
+				} else {
+					BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+				}
+			}
+			//NOT EQUALS TO: !=
+			else if (expression.get(index) instanceof NotEqualsToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((DoubleToken)oneNew).value != ((DoubleToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value != ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+					}
+					boolean newVal = ((IntegerToken)oneNew).value != ((IntegerToken)twoNew).value;
+					expression.set(index, new BooleanToken(newVal));
+				} else if (one instanceof StringToken && two instanceof StringToken) {
+					String oneNew = "" + one;
+					String twoNew = "" + two;
+					expression.set(index, new BooleanToken(!oneNew.equals(twoNew)));
+				} else {
+					BeanInterpreter.exception(one.type + " cannot be compared to " + two.type);
+				}
+			}
+			expression.remove(index + 1);
+			expression.remove(index - 1);
+			index = this.first8(expression);
+		}
+		
 		if (expression.size() > 1) {
-			System.out.println(expression);
+			//System.out.println(expression);
 			BeanInterpreter.exception("BAD STATEMENT");
 		}
 		return expression.get(0);
@@ -460,6 +669,24 @@ public class BeanParser {
 	private int first11(ArrayList<Token> exprTokenList) {
 		for (int i = 0; i < exprTokenList.size(); i++) {
 			if (exprTokenList.get(i) instanceof PlusToken || exprTokenList.get(i) instanceof MinusToken) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private int first9(ArrayList<Token> exprTokenList) {
+		for (int i = 0; i < exprTokenList.size(); i++) {
+			if (exprTokenList.get(i).type.equals("CMP")) {
+				return i;
+			}
+		}
+		return -1;
+	}
+	
+	private int first8(ArrayList<Token> exprTokenList) {
+		for (int i = 0; i < exprTokenList.size(); i++) {
+			if (exprTokenList.get(i).type.equals("TST")) {
 				return i;
 			}
 		}
