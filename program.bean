@@ -1,9 +1,10 @@
-double foo = 4 + 12;
+int foo = 4 + 12;
 print(foo * 6);
 
 foo = foo / 8;
 
 double foobar = 5.0;
-foo = foo ** foobar;
-print("" + 'c' + true + foo);
-//print((int)5.0);
+foo = foo * (int)foobar;
+int c = 99;
+
+print("" + (char)c + true + foo);

@@ -52,7 +52,7 @@ public class BeanLexer {
 	}
 	
 	private void skipWhitespace() {
-		while(this.currentChar != 0 && this.currentChar == ' ') {
+		while(this.currentChar != 0 && (this.currentChar == ' ' || this.currentChar == '\t')) {
 			this.advance();
 		}
 	}
@@ -162,7 +162,7 @@ public class BeanLexer {
 	
 	private Token getNextToken() {
 		while (this.currentChar != 0) {
-			if (this.currentChar == ' ') {
+			if (this.currentChar == ' ' || this.currentChar == '\t') {
 				this.skipWhitespace();
 				continue;
 			}
@@ -280,9 +280,6 @@ public class BeanLexer {
 				if (this.currentChar == '=') {
 					this.advance();
 					return new MultiEqualsToken();
-				} else if (this.currentChar == '*') {
-					this.advance();
-					return new ExpoToken();
 				} else {
 					return new MultiToken();
 				}

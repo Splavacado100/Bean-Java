@@ -27,14 +27,13 @@ public class BeanInterpreter {
 		
 		while (scn.hasNextLine()) {
 			line = scn.nextLine();
-			line = line.trim();
 			
 			if (line.length() > 0) {
 				if (line.charAt(0) == 47 && line.charAt(1) == 47) {
 					continue;
 				}
 				tokensLine = new ArrayList<Token>();
-				lexer = new BeanLexer(line);
+				lexer = new BeanLexer(line.trim());
 				lexer.run();
 				
 				Token curToken = tokensLine.get(0);
@@ -71,14 +70,9 @@ public class BeanInterpreter {
 	}
 	
 	public static void exception(String s) {
-		//System.out.println();
 		System.out.print("Line " + lineNum + ": ");
-		//System.out.println("ERROR");
 		System.out.println(s);
-		System.exit(0);
-	}
-	
-	public static void end() {
+		System.out.println(line);
 		System.exit(0);
 	}
 }

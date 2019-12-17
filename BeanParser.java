@@ -17,20 +17,9 @@ public class BeanParser {
 				expression.add(tokenList.get(i));
 			}
 			Token out = expr(expression);
-			if (out instanceof IntegerToken) {
-				System.out.println(((IntegerToken)out).value);
-			} else if (out instanceof DoubleToken) {
-				System.out.println(((DoubleToken)out).value);
-			} else if (out instanceof StringToken) {
-				System.out.println(((StringToken)out).value);
-			} else if (out instanceof CharacterToken) {
-				System.out.println(((CharacterToken)out).value);
-			} else if (out instanceof BooleanToken) {
-				System.out.println(((BooleanToken)out).value);
-			} else {
-				BeanInterpreter.exception("BAD TYPE");
-			}
+			System.out.println("" + out);
 		}
+		//variable declaration
 		else if (this.tokenList.get(0).type.equals("TYPE") && this.tokenList.get(1) instanceof VariableToken && this.tokenList.get(2) instanceof EmptyToken && this.tokenList.get(tokenList.size() - 1) instanceof EmptyToken) {
 			String name = ((VariableToken)this.tokenList.get(1)).value;
 			Token type = this.tokenList.get(0);
@@ -43,8 +32,9 @@ public class BeanParser {
 			} else if (type instanceof CharTypeToken) {
 				BeanInterpreter.variables.addVar(new CharacterToken(), name);
 			} else if (type instanceof BoolTypeToken) {
-				BeanInterpreter.variables.addVar(new FalseToken(), name);
+				BeanInterpreter.variables.addVar(new BooleanToken(), name);
 			} else {
+				//Unreachable state
 				BeanInterpreter.exception("Unidentified type");
 			}
 		}
@@ -57,57 +47,24 @@ public class BeanParser {
 			Token out = expr(expression);
 			String name = ((VariableToken)this.tokenList.get(1)).value;
 			Token type = this.tokenList.get(0);
+			
 			if (type instanceof IntTypeToken) {
-				if (out instanceof IntegerToken) {
-					BeanInterpreter.variables.addVar(out, name);
-				} else if (out instanceof DoubleToken) {
-					BeanInterpreter.exception("Lossy conversion - type double to int");
-				} else if (out instanceof CharacterToken) {
-					int value = ((CharacterToken)out).value;
-					out = new IntegerToken(value);
-					BeanInterpreter.variables.addVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cInt(out);
+				BeanInterpreter.variables.addVar(out, name);
 			} else if (type instanceof DoubleTypeToken) {
-				if (out instanceof IntegerToken) {
-					double value = ((IntegerToken)out).value;
-					out = new DoubleToken(value);
-					BeanInterpreter.variables.addVar(out, name);
-				} else if (out instanceof DoubleToken) {
-					BeanInterpreter.variables.addVar(out, name);
-				} else if (out instanceof CharacterToken) {
-					double value = ((CharacterToken)out).value;
-					out = new DoubleToken(value);
-					BeanInterpreter.variables.addVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cDouble(out);
+				BeanInterpreter.variables.addVar(out, name);
 			} else if (type instanceof StrTypeToken) {
-				if (out instanceof StringToken) {
-					BeanInterpreter.variables.addVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type conversion");
-				}
+				out = DatatypeDict.cStr(out);
+				BeanInterpreter.variables.addVar(out, name);
 			} else if (type instanceof CharTypeToken) {
-				if (out instanceof IntegerToken) {
-					char value = (char)(((IntegerToken)out).value);
-					out = new CharacterToken(value);
-					BeanInterpreter.variables.addVar(out, name);
-				} else if (out instanceof CharacterToken) {
-					BeanInterpreter.variables.addVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cChar(out);
+				BeanInterpreter.variables.addVar(out, name);
 			} else if (type instanceof BoolTypeToken) {
-				if (out instanceof TrueToken) {
-					BeanInterpreter.variables.addVar(out, name);
-				} else if (out instanceof FalseToken) {
-					BeanInterpreter.variables.addVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cBool(out);
+				BeanInterpreter.variables.addVar(out, name);
 			} else {
+				//Unreachable state
 				BeanInterpreter.exception("Unidentified type");
 			}
 		}
@@ -120,57 +77,24 @@ public class BeanParser {
 			Token out = expr(expression);
 			String name = ((VariableToken)this.tokenList.get(0)).value;
 			Token type = BeanInterpreter.variables.getVar(name);
+			
 			if (type instanceof IntegerToken) {
-				if (out instanceof IntegerToken) {
-					BeanInterpreter.variables.setVar(out, name);
-				} else if (out instanceof DoubleToken) {
-					BeanInterpreter.exception("Lossy conversion - type double to int");
-				} else if (out instanceof CharacterToken) {
-					int value = ((CharacterToken)out).value;
-					out = new IntegerToken(value);
-					BeanInterpreter.variables.setVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cInt(out);
+				BeanInterpreter.variables.setVar(out, name);
 			} else if (type instanceof DoubleToken) {
-				if (out instanceof IntegerToken) {
-					double value = ((IntegerToken)out).value;
-					out = new DoubleToken(value);
-					BeanInterpreter.variables.setVar(out, name);
-				} else if (out instanceof DoubleToken) {
-					BeanInterpreter.variables.setVar(out, name);
-				} else if (out instanceof CharacterToken) {
-					double value = ((CharacterToken)out).value;
-					out = new DoubleToken(value);
-					BeanInterpreter.variables.setVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cDouble(out);
+				BeanInterpreter.variables.setVar(out, name);
 			} else if (type instanceof StringToken) {
-				if (out instanceof StringToken) {
-					BeanInterpreter.variables.setVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type conversion");
-				}
+				out = DatatypeDict.cStr(out);
+				BeanInterpreter.variables.setVar(out, name);
 			} else if (type instanceof CharacterToken) {
-				if (out instanceof IntegerToken) {
-					char value = (char)(((IntegerToken)out).value);
-					out = new CharacterToken(value);
-					BeanInterpreter.variables.setVar(out, name);
-				} else if (out instanceof CharacterToken) {
-					BeanInterpreter.variables.setVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
-			} else if (type instanceof TrueToken || type instanceof FalseToken) {
-				if (out instanceof TrueToken) {
-					BeanInterpreter.variables.setVar(out, name);
-				} else if (out instanceof FalseToken) {
-					BeanInterpreter.variables.setVar(out, name);
-				} else {
-					BeanInterpreter.exception("Invalid type coversion");
-				}
+				out = DatatypeDict.cChar(out);
+				BeanInterpreter.variables.setVar(out, name);
+			} else if (type instanceof BooleanToken) {
+				out = DatatypeDict.cBool(out);
+				BeanInterpreter.variables.setVar(out, name);
 			} else {
+				//Unreachable state
 				BeanInterpreter.exception("Unidentified type");
 			}
 		}
@@ -180,6 +104,9 @@ public class BeanParser {
 	}
 	
 	private Token expr(ArrayList<Token> expression) {
+		if (expression.size() == 1) {
+			return expression.get(0);
+		}
 		int index;
 		
 		//VARIABLE REMOVAL
@@ -189,7 +116,15 @@ public class BeanParser {
 			expression.set(index, replace);
 			index = findVars(expression);
 		}
-		
+		/*
+		//Typecasting setup-takes off parentheses
+		index = first13(expression);
+		while (index != -1) {
+			expression.remove(index + 1);
+			expression.remove(index - 1);
+			index = first13(expression);
+		}
+		*/
 		this.checkParentheses(expression);
 		Token eval;
 		ArrayList<Token> temp;
@@ -200,11 +135,6 @@ public class BeanParser {
 		open = this.findOpen(expression);
 		closed = this.findClosed(expression, open);
 		while (open != -1) {
-			if (expression.get(open + 1).type.equals("TYPE")) {
-				open = this.findOpen(expression, open - 1);
-				closed = this.findClosed(expression, open);
-				continue;
-			}
 			temp = new ArrayList<Token>();
 			for (int i = open + 1; i < closed; i++) {
 				temp.add(expression.get(i));
@@ -218,102 +148,33 @@ public class BeanParser {
 			closed = this.findClosed(expression, open);
 		}
 		
+		//casting
+		index = first13(expression);
+		while (index != -1) {
+			Token type = expression.get(index);
+			Token out = expression.get(index + 1);
+			
+			if (type instanceof IntTypeToken) {
+				out = DatatypeDict.mInt(out);
+			} else if (type instanceof DoubleTypeToken) {
+				out = DatatypeDict.mDouble(out);
+			} else if (type instanceof StrTypeToken) {
+				out = DatatypeDict.mStr(out);
+			} else if (type instanceof CharTypeToken) {
+				out = DatatypeDict.mChar(out);
+			} else if (type instanceof BoolTypeToken) {
+				out = DatatypeDict.mBool(out);
+			} else {
+				//Unreachable state
+				BeanInterpreter.exception("Unidentified type");
+			}
+			expression.remove(index);
+			expression.set(index, out);
+			index = first13(expression);
+		}
+		
 		Token one;
 		Token two;
-		
-		//EXPONENT
-		index = this.first15(expression);
-		while (index != -1) {
-			one = expression.get(index - 1);
-			two = expression.get(index + 1);
-			if (one instanceof IntegerToken) {
-				if (two instanceof IntegerToken) {
-					int newValue = (int)Math.pow(((IntegerToken)one).value, ((IntegerToken)two).value);;
-					expression.set(index, new IntegerToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else if (two instanceof DoubleToken) {
-					double newValue = Math.pow(((IntegerToken)one).value, ((DoubleToken)two).value);
-					expression.set(index, new DoubleToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else if (two instanceof CharacterToken) {
-					int newValue = (int)Math.pow(((IntegerToken)one).value, (int)(((CharacterToken)two).value));;
-					expression.set(index, new IntegerToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else {
-					BeanInterpreter.exception("Bad type for binary operator '**'");
-				}		
-			} else if (one instanceof DoubleToken) {
-				if (two instanceof IntegerToken) {
-					double newValue = Math.pow(((DoubleToken)one).value, ((IntegerToken)two).value);
-					expression.set(index, new DoubleToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else if (two instanceof DoubleToken) {
-					double newValue = Math.pow(((DoubleToken)one).value, ((DoubleToken)two).value);
-					expression.set(index, new DoubleToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else if (two instanceof CharacterToken) {
-					double newValue = (int)Math.pow(((DoubleToken)one).value, (int)(((CharacterToken)two).value));;
-					expression.set(index, new DoubleToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else {
-					BeanInterpreter.exception("Bad type for binary operator '**'");
-				}
-			} else if (one instanceof CharacterToken) {
-				if (two instanceof IntegerToken) {
-					int newValue = (int)Math.pow((int)(((CharacterToken)one).value), ((IntegerToken)two).value);
-					expression.set(index, new DoubleToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else if (two instanceof DoubleToken) {
-					double newValue = Math.pow((int)(((CharacterToken)one).value), ((DoubleToken)two).value);
-					expression.set(index, new DoubleToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else if (two instanceof CharacterToken) {
-					int newValue = (int)Math.pow((int)(((CharacterToken)one).value), (int)(((CharacterToken)two).value));;
-					expression.set(index, new IntegerToken(newValue));
-					expression.remove(index + 1);
-					expression.remove(index - 1);
-				} else {
-					BeanInterpreter.exception("Bad type for binary operator '**'");
-				}
-			} else {
-				BeanInterpreter.exception("Bad type for binary operator '**'");
-			}
-			index = this.first15(expression);
-		}
-		
-		//TYPECASTING
-		index = this.first13(expression);
-		while (index != -1) {
-			System.out.println(index);
-			if (!(expression.get(index - 1) instanceof OpenParenthesesToken && expression.get(index + 1) instanceof ClosedParenthesesToken)) {
-				BeanInterpreter.exception("To typecast, the type must be enclosed in parentheses");
-			}
-			switch(expression.get(index).type) {
-				case "CHAR":
-					expression.set(index + 2, DatatypeDict.toChar(expression.get(index + 2)));
-					break;
-				case "INT":
-					expression.set(index + 2, DatatypeDict.toInt(expression.get(index + 2)));
-					break;
-				case "DOUBLE":
-					expression.set(index + 2, DatatypeDict.toDouble(expression.get(index + 2)));
-					break;
-				default:
-					BeanInterpreter.exception("Bad typecasting type");
-			}
-			expression.remove(index - 1);
-			expression.remove(index - 1);
-			expression.remove(index - 1);
-			index = this.first12(expression);
-		}
 		
 		//MULTIPLICATION, DIVISION, AND MOD
 		index = this.first12(expression);
@@ -322,397 +183,173 @@ public class BeanParser {
 			two = expression.get(index + 1);
 			//MULTIPLY
 			if (expression.get(index) instanceof MultiToken) {
-				if (one instanceof IntegerToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = ((IntegerToken)one).value * ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((IntegerToken)one).value * ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof StringToken) {
-						String newString = "";
-						String oldString = ((StringToken)two).value;
-						int limit = ((IntegerToken)one).value;
-						for (int i = 0; i < limit; i++) {
-							newString += oldString;
-						}
-						expression.set(index, new StringToken(newString));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = ((IntegerToken)one).value * (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '*'");
-					}		
-				} else if (one instanceof DoubleToken) {
-					if (two instanceof IntegerToken) {
-						double newValue = ((DoubleToken)one).value * ((IntegerToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((DoubleToken)one).value * ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						double newValue = ((DoubleToken)one).value * (int)(((CharacterToken)two).value);
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '*'");
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be multiplied by " + two.type);
 					}
-				} else if (one instanceof StringToken) {
-					if (two instanceof IntegerToken) {
-						String newString = "";
-						String oldString = ((StringToken)one).value;
-						int limit = ((IntegerToken)two).value;
-						for (int i = 0; i < limit; i++) {
-							newString += oldString;
-						}
-						expression.set(index, new StringToken(newString));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '*'");
+					double newVal = ((DoubleToken)oneNew).value * ((DoubleToken)twoNew).value;
+					expression.set(index, new DoubleToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be multiplied by " + two.type);
 					}
-				} else if (one instanceof CharacterToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = (int)(((CharacterToken)one).value) * ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = (int)(((CharacterToken)one).value) * ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = (int)(((CharacterToken)one).value) * (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '*'");
+					int newVal = ((IntegerToken)oneNew).value * ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be multiplied by " + two.type);
 					}
+					int newVal = ((IntegerToken)oneNew).value * ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
 				} else {
-					BeanInterpreter.exception("Bad type for binary operator '*'");
+					BeanInterpreter.exception(one.type + " cannot be multiplied by " + two.type);
 				}
 			}
 			//DIVIDE
 			else if (expression.get(index) instanceof DivToken) {
-				if (one instanceof IntegerToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = ((IntegerToken)one).value / ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((IntegerToken)one).value / ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = ((IntegerToken)one).value / (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
-					}		
-				} else if (one instanceof DoubleToken) {
-					if (two instanceof IntegerToken) {
-						double newValue = ((DoubleToken)one).value / ((IntegerToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((DoubleToken)one).value / ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						double newValue = ((DoubleToken)one).value / (int)(((CharacterToken)two).value);
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be divided by " + two.type);
 					}
-				} else if (one instanceof CharacterToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = (int)(((CharacterToken)one).value) / ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = (int)(((CharacterToken)one).value) / ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = (int)(((CharacterToken)one).value) / (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
+					double newVal = ((DoubleToken)oneNew).value / ((DoubleToken)twoNew).value;
+					expression.set(index, new DoubleToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be divided by " + two.type);
 					}
+					int newVal = ((IntegerToken)oneNew).value / ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be divided by " + two.type);
+					}
+					int newVal = ((IntegerToken)oneNew).value / ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
 				} else {
-					BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
+					BeanInterpreter.exception(one.type + " cannot be divided by " + two.type);
 				}
 			}
 			//MOD
-			else {
-				if (one instanceof IntegerToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = ((IntegerToken)one).value % ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((IntegerToken)one).value % ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = ((IntegerToken)one).value % (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
-					}		
-				} else if (one instanceof DoubleToken) {
-					if (two instanceof IntegerToken) {
-						double newValue = ((DoubleToken)one).value % ((IntegerToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((DoubleToken)one).value % ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						double newValue = ((DoubleToken)one).value % (int)(((CharacterToken)two).value);
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
+			else if (expression.get(index) instanceof ModToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be modded by " + two.type);
 					}
-				} else if (one instanceof CharacterToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = (int)(((CharacterToken)one).value) % ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = (int)(((CharacterToken)one).value) % ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = (int)(((CharacterToken)one).value) % (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
+					double newVal = ((DoubleToken)oneNew).value % ((DoubleToken)twoNew).value;
+					expression.set(index, new DoubleToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be modded by " + two.type);
 					}
+					int newVal = ((IntegerToken)oneNew).value % ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be modded by " + two.type);
+					}
+					int newVal = ((IntegerToken)oneNew).value % ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
 				} else {
-					BeanInterpreter.exception("Bad type for binary operator '" + (char)37 + "'");
+					BeanInterpreter.exception(one.type + " cannot be modded by " + two.type);
 				}
 			}
+			expression.remove(index + 1);
+			expression.remove(index - 1);
 			index = this.first12(expression);
 		}
 		
-		//ADDING AND SUBTRACTING
+		//PLUS, MINUS, AND STRING ADD
 		index = this.first11(expression);
 		while (index != -1) {
 			one = expression.get(index - 1);
 			two = expression.get(index + 1);
-			//ADDING
+			//PLUS AND STRING ADD
 			if (expression.get(index) instanceof PlusToken) {
-				if (one instanceof IntegerToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = ((IntegerToken)one).value + ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((IntegerToken)one).value + ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof StringToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = ((IntegerToken)one).value + (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary 0operator '+'");
+				if (one instanceof StringToken || two instanceof StringToken) {
+					String newVal = "" + one + two;
+					expression.set(index, new StringToken(newVal));
+				} else if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be added to " + two.type);
 					}
-				} else if (one instanceof DoubleToken) {
-					if (two instanceof IntegerToken) {
-						double newValue = ((DoubleToken)one).value + ((IntegerToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((DoubleToken)one).value + ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof StringToken) {
-						String newValue = ((DoubleToken)one).value + ((StringToken)two).value;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						double newValue = ((DoubleToken)one).value + (int)(((CharacterToken)two).value);
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '+'");
+					double newVal = ((DoubleToken)oneNew).value + ((DoubleToken)twoNew).value;
+					expression.set(index, new DoubleToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be added to " + two.type);
 					}
-				} else if (one instanceof StringToken) {
-					if (two instanceof IntegerToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof StringToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof BooleanToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '+'");
+					int newVal = ((IntegerToken)oneNew).value + ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be added to " + two.type);
 					}
-				} else if (one instanceof CharacterToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = (int)(((CharacterToken)one).value) + ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = (int)(((CharacterToken)one).value) + ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof StringToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = (int)(((CharacterToken)one).value) + (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '" + (char)47 + "'");
-					}
-				} else if (one instanceof BooleanToken) {
-					if (two instanceof StringToken) {
-						String newValue = "" + one + two;
-						expression.set(index, new StringToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '+'");
-					}
+					int newVal = ((IntegerToken)oneNew).value + ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
 				} else {
-					BeanInterpreter.exception("Bad type for binary operator '+'");
+					BeanInterpreter.exception(one.type + " cannot be added to " + two.type);
 				}
 			}
-			//SUBTRACTING
-			else {
-				if (one instanceof IntegerToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = ((IntegerToken)one).value - ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((IntegerToken)one).value - ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '-'");
-					}	
-				} else if (one instanceof DoubleToken) {
-					if (two instanceof IntegerToken) {
-						double newValue = ((DoubleToken)one).value - ((IntegerToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = ((DoubleToken)one).value - ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '-'");
-					}	
-				} else if (one instanceof CharacterToken) {
-					if (two instanceof IntegerToken) {
-						int newValue = (int)(((CharacterToken)one).value) - ((IntegerToken)two).value;
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof DoubleToken) {
-						double newValue = (int)(((CharacterToken)one).value) - ((DoubleToken)two).value;
-						expression.set(index, new DoubleToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else if (two instanceof CharacterToken) {
-						int newValue = (int)(((CharacterToken)one).value) - (int)(((CharacterToken)two).value);
-						expression.set(index, new IntegerToken(newValue));
-						expression.remove(index + 1);
-						expression.remove(index - 1);
-					} else {
-						BeanInterpreter.exception("Bad type for binary operator '-'");
+			//SUBTRACTED
+			else if (expression.get(index) instanceof DivToken) {
+				if (one instanceof DoubleToken || two instanceof DoubleToken) {
+					Token oneNew = DatatypeDict.aDouble(one);
+					Token twoNew = DatatypeDict.aDouble(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be subtracted by " + two.type);
 					}
+					double newVal = ((DoubleToken)oneNew).value - ((DoubleToken)twoNew).value;
+					expression.set(index, new DoubleToken(newVal));
+				} else if (one instanceof IntegerToken || two instanceof IntegerToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be subtracted by " + two.type);
+					}
+					int newVal = ((IntegerToken)oneNew).value - ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
+				} else if (one instanceof CharacterToken || two instanceof CharacterToken) {
+					Token oneNew = DatatypeDict.aInt(one);
+					Token twoNew = DatatypeDict.aInt(two);
+					if (oneNew instanceof EOFToken || twoNew instanceof EOFToken) {
+						BeanInterpreter.exception(one.type + " cannot be subtracted by " + two.type);
+					}
+					int newVal = ((IntegerToken)oneNew).value - ((IntegerToken)twoNew).value;
+					expression.set(index, new IntegerToken(newVal));
 				} else {
-					BeanInterpreter.exception("Bad type for binary operator '-'");
+					BeanInterpreter.exception(one.type + " cannot be subtracted by " + two.type);
 				}
 			}
+			expression.remove(index + 1);
+			expression.remove(index - 1);
 			index = this.first11(expression);
 		}
 		if (expression.size() > 1) {
+			System.out.println(expression);
 			BeanInterpreter.exception("BAD STATEMENT");
 		}
 		return expression.get(0);
@@ -745,15 +382,6 @@ public class BeanParser {
 	
 	private int findOpen(ArrayList<Token> exprTokenList) {
 		for (int i = exprTokenList.size() - 1; i >= 0; i--) {
-			if (exprTokenList.get(i) instanceof OpenParenthesesToken) {
-				return i;
-			}
-		}
-		return -1;
-	}
-	
-	private int findOpen(ArrayList<Token> exprTokenList, int start) {
-		for (int i = start; i >= 0; i--) {
 			if (exprTokenList.get(i) instanceof OpenParenthesesToken) {
 				return i;
 			}
