@@ -194,11 +194,6 @@ public class BeanLexer {
 				if (name.equals("print")) {
 					return new PrintToken();
 				}
-				/*
-				if (name.equals("println")) {
-					return new PrintlnToken();
-				}
-				*/
 				if (name.equals("int")) {
 					return new IntTypeToken();
 				}
@@ -220,11 +215,6 @@ public class BeanLexer {
 				if (name.equals("char")) {
 					return new CharTypeToken();
 				}
-				/*
-				if (name.equals("func")) {
-					return new FuncTypeToken();
-				}
-				*/
 				return new VariableToken(name);
 			}
 			if (this.currentChar == '(') {
@@ -262,13 +252,7 @@ public class BeanLexer {
 			}
 			if (this.currentChar == '-') {
 				this.advance();
-				if (this.isDigit(this.currentChar)) {
-					if (this.isDouble()) {
-						return new DoubleToken(-1.0 * this.getDouble());
-					} else {
-						return new IntegerToken(-1 * this.getInteger());
-					}
-				} else if (this.currentChar == '=') {
+				if (this.currentChar == '=') {
 					this.advance();
 					return new MinusEqualsToken();
 				} else {
@@ -284,6 +268,15 @@ public class BeanLexer {
 					return new MultiToken();
 				}
 			}
+			if (this.currentChar == '%') {
+				this.advance();
+				if (this.currentChar == '=') {
+					this.advance();
+					return new ModEqualsToken();
+				} else {
+					return new ModToken();
+				}
+			}
 			if (this.currentChar == 37) {
 				this.advance();
 				return new ModToken();
@@ -293,6 +286,10 @@ public class BeanLexer {
 				if (this.currentChar == '=') {
 					this.advance();
 					return new DivEqualsToken();
+				} if (this.currentChar == 47) {
+					//Detecting midline comment
+					this.advance();
+					return new EOLToken();
 				} else {
 					return new DivToken();
 				}

@@ -78,6 +78,42 @@ public class BeanParser {
 			String name = ((VariableToken)this.tokenList.get(0)).value;
 			Token type = BeanInterpreter.variables.getVar(name);
 			
+			//Augmented assignment
+			
+			if (this.tokenList.get(1) instanceof MultiEqualsToken) {
+				ArrayList<Token> temp = new ArrayList<Token>();
+				temp.add(this.tokenList.get(0));
+				temp.add(new MultiToken());
+				temp.add(out);
+				out = expr(temp);
+			} else if (this.tokenList.get(1) instanceof DivEqualsToken) {
+				ArrayList<Token> temp = new ArrayList<Token>();
+				temp.add(this.tokenList.get(0));
+				temp.add(new DivToken());
+				temp.add(out);
+				out = expr(temp);
+			} else if (this.tokenList.get(1) instanceof ModEqualsToken) {
+				ArrayList<Token> temp = new ArrayList<Token>();
+				temp.add(this.tokenList.get(0));
+				temp.add(new ModToken());
+				temp.add(out);
+				out = expr(temp);
+			} else if (this.tokenList.get(1) instanceof PlusEqualsToken) {
+				ArrayList<Token> temp = new ArrayList<Token>();
+				temp.add(this.tokenList.get(0));
+				temp.add(new PlusToken());
+				temp.add(out);
+				out = expr(temp);
+			} else if (this.tokenList.get(1) instanceof MinusEqualsToken) {
+				ArrayList<Token> temp = new ArrayList<Token>();
+				temp.add(this.tokenList.get(0));
+				temp.add(new MinusToken());
+				temp.add(out);
+				out = expr(temp);
+			} else {
+				//Regular equals
+			}
+			
 			if (type instanceof IntegerToken) {
 				out = DatatypeDict.cInt(out);
 				BeanInterpreter.variables.setVar(out, name);
