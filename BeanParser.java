@@ -134,6 +134,15 @@ public class BeanParser {
 				BeanInterpreter.exception("Unidentified type");
 			}
 		}
+		//While loop
+		else if (this.tokenList.get(0) instanceof WhileToken && this.tokenList.get(1) instanceof OpenParenthesesToken && this.tokenList.get(this.size - 2) instanceof ClosedParenthesesToken && this.tokenList.get(this.size - 1) instanceof OpenBraceToken) {
+			BeanInterpreter.curScope++;
+			ArrayList<Token> condition = new ArrayList<Token>();
+			for (int i = 2; i < this.size - 2; i++) {
+				condition.add(tokenList.get(i));
+			}
+			boolean result = ((BooleanToken)DatatypeDict.aBool(this.expr(condition))).value;
+		}
 		else {
 			BeanInterpreter.exception("BAD STATEMENT");
 		}
