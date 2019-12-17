@@ -116,15 +116,7 @@ public class BeanParser {
 			expression.set(index, replace);
 			index = findVars(expression);
 		}
-		/*
-		//Typecasting setup-takes off parentheses
-		index = first13(expression);
-		while (index != -1) {
-			expression.remove(index + 1);
-			expression.remove(index - 1);
-			index = first13(expression);
-		}
-		*/
+		
 		this.checkParentheses(expression);
 		Token eval;
 		ArrayList<Token> temp;
@@ -314,7 +306,7 @@ public class BeanParser {
 					BeanInterpreter.exception(one.type + " cannot be added to " + two.type);
 				}
 			}
-			//SUBTRACTED
+			//MINUS
 			else if (expression.get(index) instanceof DivToken) {
 				if (one instanceof DoubleToken || two instanceof DoubleToken) {
 					Token oneNew = DatatypeDict.aDouble(one);
