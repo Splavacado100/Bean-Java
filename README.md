@@ -30,17 +30,19 @@ int foo = 4 + 12;
 print(foo * 6);
 
 foo = foo / 8;
-
 double foobar = 5.0;
 foo = foo * (int)foobar;
+
 int c = 99;
+
+foo += 14;
 
 print("" + (char)c + true + foo);
 ```
 ### OUTPUT:
 ```
 96.0
-ctrue10
+ctrue24
 ```
 
 ### Things to work on:
