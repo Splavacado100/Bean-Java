@@ -15,7 +15,8 @@ Printing is done a la Python but a touch of Java, i.e. print(expression);
 print() function does carry a newline, in the future a formatted print statement will come without newline, i.e. printf()
 
 Current primitive data types are: (char)acter, (str)ing, (int)eger, double, and (bool)ean
-Current binary operators are: +, -, *, /, and %
+
+All the usual binary operators exist, as well as logical and comparison operators. Protip: since strings are primitive, you can use == and != (>, <, >=, <= to come) to compare them
 
 Much like Java, chars are treated as integers when operated on with other integers. String operaters have been created,
 with '+' tacking on the literal representation of the type.
@@ -39,40 +40,36 @@ foo += 14;
 
 print("" + (char)c + true + foo);
 
-print(c > foo);
-
-str s = "Hi";
-print(s == "Hi");
+print(!(c > foo) || foo > foobar);
 ```
 ### OUTPUT:
 ```
 96.0
 ctrue24
 true
-true
 ```
 
 ### Things to work on:
 ```
--Logical and bitwise operators
-
-   -It'll expand more of the options the programmer has
  
--If, for, and while loops
+1-If, for, and while loops
 
    -A crucial part of making the coding not just linear
  
--Functions
+2-Functions
 
    -Brings the high-level structure of most modern languages, i.e. not goto
  
--Arrays, lists, stacks, and queues
+3-Arrays, lists, stacks, and queues
 
    -I havent decided if I want the "list" type to be bounded of unbounded
  
    -I know I at least want same type and passed by reference
  
    -It's easy, so stacks and queues are going to become built-in data types
+4-Bitwise operators
+
+   -It'll expand more of the options the programmer has
 ```
 If you have any questions, comments, or suggestions about any of the code, email me at splavacado100@gmail.com
 
