@@ -654,7 +654,7 @@ public class BeanParser {
 		}
 		
 		if (expression.size() > 1) {
-			BeanInterpreter.exception("BAD STATEMENT");
+			BeanInterpreter.exception("Unidentified token in expression");
 		}
 		return expression.get(0);
 	}
